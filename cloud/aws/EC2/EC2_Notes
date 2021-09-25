@@ -1,0 +1,68 @@
+if you are facing timout issues once logged into ec2 instances try below. 
+
+on ec2 terminal, 
+
+        echo "ClientAliveInterval 600" >> /etc/ssh/sshd_config
+        service sshd restart
+
+        logout & login back
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+https://aws.amazon.com/ec2/instance-explorer/?ec2-instances-cards.sort-by=item.additionalFields.category-order&ec2-instances-cards.sort-order=asc&awsf.ec2-instances-filter-category=instance-category%23compute-optimized
+
+Moving volume
+=============
+
+From one AZ to another
+1. Take a snapshot of the volume
+2. Create an AMI from the snapshot 
+3. Launch new EC2 instance in desired AZ
+
+From one region to another.
+1. Take a snapshot of the volume
+2. create an AMI from the snapshot 
+3. copy the AMI to another region 
+4. Launch new EC2 instance from the copied AMI
+
+User data:
+==========
+#!/bin/bash
+sudo su
+yum install httpd -y
+service httpd start
+service httpd status
+systemctl enable httpd
+systemctl chconfig httpd on
+echo "<h12>This is my first web site. </h12>" >> /var/www/html/index.html
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+How to connect to RDS from EC2 instance.
+========================================
+Create SG for EC2 with SSH (22)
+Create SG for RDS with 3306 (MYSQL/Aurora) , source as EC2 EG.
+Note : Both should be in same AZ.
+Create RDS instance in default VPC.
+Connect to EC2 instance and perform below activities.
+sudo su
+yum install mysql -y  ===> Install Mysql client.
+mysql -h database-1.cw3qxgb4biyo.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
+admin123
+
+show databases;
+create database myDB;
+use myDB;
+show tables;
+create table if not exists myemp(eid INT AUTO_INCREMENT,ename varchar(255) NOT NULL,esalary INT,
+eaddress VARCHAR(255),PRIMARY KEY (eid));
+
+insert into myemp (ename,esalary,eaddress) values ('Mohan',20000,'BLR');
+insert into myemp (ename,esalary,eaddress) values ('Manoj',55000,'AP');
+insert into myemp (ename,esalary,eaddress) values ('Yugandhar',20000,'CHN');
+
+select * from myemp;
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+https://aws.amazon.com/elasticloadbalancing/pricing/

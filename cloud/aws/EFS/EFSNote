@@ -1,0 +1,19 @@
+Step1: Create security group to allow SSH (22) for EC2 instance.
+Step2: Create security group (Inbound SG) which should allow NFS (2049) for EFS , source may be SG of EC2 instance.
+Step3: Create Role for EC2 instance with Full Access to EFS.
+Step4: Create EFS with maximum number of AZs.(EC2 instances should be within these AZs)
+Step5: Create EC2 instances with above Role.
+
+
+Mount EFS to EC2 instances using below steps.
+#Create efs directory on both EC2 instances.
+sudo mkdir efs
+
+#Installing the amazon-efs-utils Package on Amazon Linux
+sudo yum install -y amazon-efs-utils
+#ref: https://docs.aws.amazon.com/efs/latest/ug/installing-amazon-efs-utils.html
+
+#Mounting with the EFS mount helper
+sudo mount -t efs -o tls fs-10f0dce5:/ efs (fs-10f0dce5 is efs id and efs is folder created in step1 and 2)
+
+ref: https://docs.aws.amazon.com/efs/latest/ug/mounting-fs-mount-helper.html#mounting-fs-mount-helper-ec2

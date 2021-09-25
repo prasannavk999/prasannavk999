@@ -1,0 +1,50 @@
+import json
+import boto3
+import logging
+logger = logging.getLogger('boto3')
+logger.setLevel(logging.INFO)
+cloudwatch = boto3.client('cloudwatch')
+boto3.set_stream_logger('boto3.resources', logging.INFO)
+
+def lambda_handler(event, context):
+	
+	existing_alarms = []
+	deleted_alarms = []
+	#num_of_alarms = 0
+	try:
+		response = cloudwatch.describe_alarms(AlarmNamePrefix='aws_notification', AlarmTypes=['MetricAlarm'])
+		#print('response ===>' + str(response))
+		logger.info('response ===>' + str(response))
+		#print('<=== Below are the alarms present with prefix as aws_notification===>')
+		logger.info('<=== Below are the alarms present with prefix as aws_notification===>')
+		for alarm_name in response['MetricAlarms']:
+			#num_of_alarms += 1
+			existing_alarms.append(alarm_name['AlarmName'])
+			#print(alarm_name['AlarmName'])
+			logger.info(alarm_name['AlarmName'])
+
+		for alarm_name in response['MetricAlarms']:
+			if cloudwatch.delete_alarms(AlarmNames=[alarm_name['AlarmName']]):
+				deleted_alarms.append(alarm_name['AlarmName'])
+				#num_of_alarms += 1
+
+		#print('<=== Below are the existing Alarms. ===>')
+		logger.info('<=== Below are the existing Alarms. ===>')
+		for ealarm in existing_alarms:
+			#print(ealarm)
+			logger.info(ealarm)
+
+		#print('<=== Below alarms deleted successfully. ===>')
+		logger.info('<=== Below alarms deleted successfully. ===>')
+		for dalarm in deleted_alarms:
+			#print(dalarm)
+			logger.info(dalarm)
+
+	except Exception as e:
+		#print('Something went wrong: ' + str(e))
+		logger.info('Something went wrong: ' + str(e))
+	finally:
+		#print('Number of existing alarms are :::' + str(len(existing_alarms)))
+		logger.info('Number of existing alarms are :::' + str(len(existing_alarms)))
+		#print('Number of alarms deleted are :::' + str(len(deleted_alarms)))
+		logger.info('Number of alarms deleted are :::' + str(len(deleted_alarms)))

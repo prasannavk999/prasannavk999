@@ -1,0 +1,50 @@
+1) Launch an Ubuntu instance and log into it.
+
+2) Create a role - https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-iamroles-for-cloudwatch-agent-commandline.html
+with Name as "CloudWatchAgentServerRole" with Policy as "CloudWatchAgentServerPolicy" & "AmazonSSMManagedInstanceCore"
+
+3) Attach the role to the EC2 instance.
+In the EC2 Console. Select the EC2. Actions -> Instance Settings -> Attach/Replace IAM Role
+4) Download the agent.
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+
+> ls lrt
+cloudwatch-agent.deb
+5) Install the agent
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb ===> For Ubuntu .
+
+Note :: sudo yum install amazon-cloudwatch-agent    ===> For Linux instance.
+
+6) Modify the configuration file using the Wizard -
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-cloudwatch-agentconfiguration-file.html
+Start the wizard - sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
+- Do you want to turn on StatsD daemon? --> No
+- Do you want to monitor metrics from CollectD? --> No
+Which default metrics config do you want? --> Standard (more about metrics configs here -
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-cloudwatchagent-configuration-file-wizard.html)
+
+- Log file path: --> /var/log/syslog
+- Do you want to specify any additional log files to monitor? --> no
+- Do you want to store the config in the SSM parameter store? --> no
+The agent configuration file wizard, amazon-cloudwatch-agent-config-wizard, asks a series of
+questions. Use all the below except for the below.
+7) File is created at /opt/aws/amazon-cloudwatch-agent/bin/config.json
+8) Start the CloudWatch Agent - 
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+9) Check the status of the agent service amazon-cloudwatch-agent status
+
+> service amazon-cloudwatch-agent status &
+
+Should say "active (running)"
+10) Go to CloudWatch Console -> Logs
+Watch the log files from the Ubuntu there.
+11) Go to CloudWatch Console -> Metrics --> All Metrics -> CWAgent -> ImageId, InstanceId,
+InstanceType, cpu -> Select a metric
+The graph should be populated.
+
+References:
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-iam-roles-for-cloudwatch-agent.html#create-iam-roles-for-cloudwatch-agent-roles
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-cloudwatch-agent-configuration-file-wizard.html
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/installing-cloudwatch-agent-ssm.html

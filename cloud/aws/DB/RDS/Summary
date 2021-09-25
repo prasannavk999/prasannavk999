@@ -1,0 +1,36 @@
+ 	Amazon Relational Database Service (Amazon RDS) is a web service that makes it easier to set up, operate, and scale a relational database in the AWS Cloud. It provides cost-efficient, resizable capacity for an industry-standard relational database and manages common database administration tasks.
+ 	Relational Database Service (RDS) is the AWS Solution for relational databases.
+ 	RDS instances are managed by AWS, you cannot SSH into the VM running the database.
+ 	There are 6 relational database options currently available on AWS, Aurora, MySQL, MariaDB, Postgres,Oracle, Microsoft SQL Server
+ 	Multi-AZ is an option you can turn on which makes an exact copy of your database in another AZ that is only standby
+ 	For Multi-AZ AWS automatically synchronizes changes in the database over to the standby copy
+ 	Multi-AZ has Automatic Failover protection if one AZ goes down failover will occur and the standby slave will be promoted to master
+ 	Read-Replicas allow you to run multiples copies of your database, these copies only allow reads (no writes) and is intended to alleviate the workload of your primary database to improve performance
+ 	Read-Replicas use Asynchronous replication
+ 	You must have automatic backups enabled to use Read Replicas
+ 	You can have upto 5 read replicas
+ 	You can combine Read Replicas with Multi-AZ
+ 	You can have Read Replicas in another Region (Cross-Region Read Replicas)
+ 	Replicas can be promoted to their own database, but this breaks replication
+ 	You can have Replicas of Read Replicas
+ 	RDS has 2 backup solutions: Automated Backups and Database Snapshots
+ 	Automated Backups, you choose a retention period between 1 and 35 days, There is no additional cost for backup storage, you define your backup window
+ 	Manual Snapshots, you manually create backups, if you delete your primary the manual snapshots will still exist and can be restored
+ 	When you restore an instance it will create a new database. You just need to delete your old database and point traffic to new restored database
+ 	You can turn on encryption at-rest for RDS via KMS
+ 	When you buy a server, you get CPU, memory, storage, and IOPS, all bundled together. With Amazon RDS, these are split apart so that you can scale them independently. If you need more CPU, less IOPS, or more storage, you can easily allocate them.
+ 	Amazon RDS manages backups, software patching, automatic failure detection, and recovery.
+ 	To deliver a managed service experience, Amazon RDS doesn't provide shell access to DB instances. It also restricts access to certain system procedures and tables that require advanced privileges.
+ 	You can have automated backups performed when you need them, or manually create your own backup snapshot. You can use these backups to restore a database. The Amazon RDS restore process works reliably and efficiently.
+ 	You can use the database products you are already familiar with: MySQL, MariaDB, PostgreSQL, Oracle, Microsoft SQL Server.
+ 	You can get high availability with a primary instance and a synchronous secondary instance that you can fail over to when problems occur. You can also use MariaDB, Microsoft SQL Server, MySQL, Oracle, and PostgreSQL read replicas to increase read scaling.
+ 	In addition to the security in your database package, you can help control who can access your RDS databases by using AWS Identity and Access Management (IAM) to define users and permissions. You can also help protect your databases by putting them in a virtual private cloud.
+
+
+
+
+https://iq.aws.amazon.com/?utm=docs&service=Amazon%20Relational%20Database%20Service
+https://iq.aws.amazon.com/?utm=docs
+https://forums.aws.amazon.com/forum.jspa?forumID=60
+https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html
+https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_BestPractices.html

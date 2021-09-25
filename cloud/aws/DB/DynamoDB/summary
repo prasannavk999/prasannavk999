@@ -1,0 +1,9 @@
+ 	DynamoDB is a fully managed NoSQL key/value and document database.
+ 	Applications that contain large amounts of data but require predictable read and write performance
+ 	while scaling is a good fit for DynamoDB
+ 	DynamoDB scales with whatever read and write capacity you specific per second.
+ 	DynamoDB can be set to have Eventually Consistent Reads (default) and Strongly Consistent Reads
+ 	Eventually consistent reads data is returned immediately but data can be inconsistent. Copies of data
+ 	will be generally consistent in 1 second.
+ 	Strongly Consistent Reads will wait until data in consistent. Data will never be inconsistent but latency will be higher. Copies of data will be consistent with a guarantee of l second.
+ 	DynamoDB stores 3 copies of data on SSD drives across 3 regions.

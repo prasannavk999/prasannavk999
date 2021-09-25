@@ -1,0 +1,19 @@
+10.0.0.0/26, We can have 64 IPs.
+2 ^ (32-26) = 2 ^ 6 = 64
+Start -- 10.0.0.0 to   End -- 10.0.0.63
+
+Subnet1 : 10.0.0.0/28    ,((10.0.0.0 to 10.0.0.15)); 2 ^ (32-28) = 2 ^ 4 = 16
+Subnet2 : 10.0.0.16/28 ,((10.0.0.16 to 10.0.0.31)); 2 ^ (32-28) = 2 ^ 4 = 16
+Subnet3 : 10.0.0.32/28 ,((10.0.0.32 to 10.0.0.47)); 2 ^ (32-28) = 2 ^ 4 = 16
+Subnet4 : 10.0.0.48/28 ,((10.0.0.48 to 10.0.0.63)); 2 ^ (32-28) = 2 ^ 4 = 16 
+
+5 IP Addresses are reserved for internal usage, first 4 + last 1 and  11 IPS will be available for use.
+
+For every VPC one Route table created, this is main Route table and will take care of all traffic if there is no Route table created explicitly.
+public route table get associated with public subnets and private route table get associated with private subnets.
+One Sub net associate with one Route Table but one Route table can associate with more than one Sub nets.
+IGW is an entity which allows traffic from VPC to Internet, only one IGW is connected to one VPC.
+
+Nat Gate way and IGW are managed services and don't worry about the availability and scalability
+CLI ::
+aws ec2 attach-internet-gateway --vpc-id "vpc-0e78296a24f299716" --internet-gateway-id "igw-008b38c7014659fab" --region us-west-1

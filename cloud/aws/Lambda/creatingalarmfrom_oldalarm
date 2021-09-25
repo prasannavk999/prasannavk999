@@ -1,0 +1,80 @@
+import boto3
+import logging
+
+logger = logging.getLogger('boto3')
+#boto3.set_stream_logger('boto3.resources', logging.INFO)
+logger.setLevel(logging.INFO)
+
+cloudwatch = boto3.client('cloudwatch')
+
+def lambda_handler(event, context):
+    existing_alarms = []
+    new_alarms = []
+    response = cloudwatch.describe_alarms(AlarmNamePrefix='aws_notification', AlarmTypes=['MetricAlarm'])
+    #print(response)
+    logger.info(response)
+    for alarm_name in response['MetricAlarms']:
+        #print(alarm_name)
+        logger.info(alarm_name)
+        #print(alarm_name['AlarmName'])
+        logger.info(alarm_name['AlarmName'])
+        ealarm = alarm_name['AlarmName']
+        existing_alarms.append(ealarm)
+        str1 = ealarm.split('_')
+        l = len(str1)
+        #print(str1[l-3])
+        if str1[l-3] == "StatusCheckFailed":
+            new_alarm = str1[0] + "_" + str1[1] +"_" + str1[l - 4]+ "_" + str1[l - 3] + "_" + str1[l - 2] + "_" + str1[l - 1]
+            #print(new_alarm)
+        else:
+            new_alarm = str1[0] + "_" + str1[1] + "_" + str1[l - 3] + "_" + str1[l - 2] + "_" + str1[l - 1]
+            #print(new_alarm)
+        if new_alarm == ealarm:
+            #print("Alarm exist :", new_alarm)
+            logger.info("Alarm alread exist :"+ str(new_alarm))
+        else:
+            if cloudwatch.put_metric_alarm(
+                AlarmName= new_alarm,
+                AlarmDescription= new_alarm,
+                ActionsEnabled=alarm_name['ActionsEnabled'],
+                AlarmActions=alarm_name['AlarmActions'],
+                MetricName=alarm_name['MetricName'],
+                Namespace=alarm_name['Namespace'],
+                Statistic=alarm_name['Statistic'],
+                Dimensions=alarm_name['Dimensions'],
+                Period=alarm_name['Period'],
+                EvaluationPeriods=alarm_name['EvaluationPeriods'],
+                DatapointsToAlarm=alarm_name['DatapointsToAlarm'],
+                Threshold=alarm_name['Threshold'],
+                ComparisonOperator=alarm_name['ComparisonOperator']
+            ):
+                new_alarms.append(new_alarm)
+                cloudwatch.disable_alarm_actions(
+                    AlarmNames=[new_alarm],
+                )
+    
+    #print('Exisitng alarms are :: ')
+    logger.info('Exisitng alarms are :: ')
+    for e_alarm in existing_alarms:
+        #print(e_alarm)
+        logger.info(e_alarm)
+    
+    #print('New alarms are :: ')
+    logger.info('New alarms are :: ')
+    for n_alarm in new_alarms:
+        #print(n_alarm)
+        logger.info(n_alarm)
+    
+    # Disable alarm
+    """"
+    #print("Disabling the below alarms:: ")
+    for n_alarm in new_alarms:
+        cloudwatch.disable_alarm_actions(
+          AlarmNames=[n_alarm],
+        )
+    
+    cloudwatch.enable_alarm_actions(
+        AlarmNames = ['aws_notification_bauschdwh1_StatusCheckFailed_Instance_P3'],
+    )
+    #print("Hello")
+    """

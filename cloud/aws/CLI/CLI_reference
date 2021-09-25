@@ -1,0 +1,124 @@
+To check the AWS CLI Version 
+C:\> aws --version
+Command to open the installed softwares.
+C:\> appwiz.cpl
+https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html
+https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html
+https://docs.aws.amazon.com/cli/index.html
+
+uninstalling CLI on Linux.
+==========================
+$ which aws
+/bin/aws
+sudo rm /bin/aws
+
+CLI installation for Linux instance.
+===================================
+sudo -i
+service httpd status
+yum install httpd
+yum install update
+service httpd restart
+wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" –o "awscli-bundle.zip"
+unzip awscli-bundle.zip
+./awscli-bundle/install
+/usr/local/bin/aws --version   ===> Verification.
+
+AWS Configuration:
+=================
+aws configure
+Access Key ID:      
+Secret Access Key:  
+Default region name [us-east-1]:
+Default output format [None]:
+json (default), table, text, yaml, yaml-stream
+
+S3
+====
+Create Bucket.
+https://docs.aws.amazon.com/cli/latest/reference/ (Mentioning the region is optional)
+aws s3api create-bucket --bucket my-bucket-test-july2019 --region us-east-1
+aws s3api create-bucket --bucket my-bucket-test-july2019
+
+aws s3api create-bucket --bucket ssssssssssaaaa --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1
+
+Create Bucket in different region.
+==================================
+aws s3api create-bucket --bucket my-bucket-tests-july2019-1 --region ap-southt-1 --create-bucket-configuration LocationConstraint=ap-south-1 --output=table
+
+delete bucket
+=============
+aws s3api delete-bucket --bucket ssssssssssaaaa --output text
+
+Upload Object
+=============
+aws s3api put-object --bucket my-bucket-may2021 --key test.png --body D:/AWS/test.png
+aws s3api put-object --bucket my-bucket-may2021 --key pavan.txt --body D:/AWS/CostEstimationCalculator.txt
+
+Upload Object into different storage class.
+===========================================
+aws s3api put-object --bucket bhc-us-comm-dw-customername-2 --key CostEstimationCalculator.txt --body D:/AWS/CostEstimationCalculator.txt --storage-class REDUCED_REDUNDANCY
+
+Listing buckets.
+===============
+aws s3api list-buckets --query "Buckets[].Name"
+
+Listing Objects.
+==============
+aws s3api list-objects --bucket my-bucket-may2021
+
+deleting Object.
+================
+aws s3api delete-object --bucket my-bucket-may2021 --key pavan.txt
+
+Downloading the Object.
+======================
+aws s3api get-object --bucket my-bucket-may2021 --key pavan2.txt mohan2.txt
+
+
+IAM
+=====
+
+Creating groups
+aws iam create-group --group-name Admins
+
+aws iam create-user --user-name Bob
+aws iam add-user-to-group --user-name Bob --group-name Admins
+
+EC2
+=====
+aws ec2 authorize-security-group-ingress --group-name MySecurityGroup --protocol tcp --port 22 --cidr 203.0.113.0/24
+aws ec2 authorize-security-group-ingress --group-name MySecurityGroup --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress --group-name MySecurityGroup --protocol RDP --port 3389 --cidr 0.0.0.0/0
+
+
+aws ec2 create-key-pair --key-name MyKeyPair
+aws ec2 describe-key-pairs --key-name MyKeyPair
+aws ec2 describe-key-pairs
+aws ec2 run-instances --image-id ami-035b3c7efe6d061d5 --count 1 --instance-type t2.micro --key-name july201916 --security-groups MySecurityGroup
+aws ec2 run-instances --image-id ami-04ca2d0801450d495 --count 1 --instance-type t2.micro --key-name MyKeyPair --security-groups MySecurityGroup
+
+ssh -i "D:\AWS\awsKeys\MyKeyPair.pem" ec2-user@ec2-3-86-251-37.compute-1.amazonaws.com
+
+SNS:
+====
+Create a Topic:
+arn:aws:sns:us-east-1:530000327822:my-topic
+
+aws sns subscribe --topic-arn arn:aws:sns:us-east-1:530000327822:my-topic --protocol email --notification-endpoint rao.mohan.2014@gmail.com
+
+Subscribe to a Topic:
+aws sns subscribe --topic-arn arn:aws:sns:us-east-1:530000327822:my-topic --protocol email --notification-endpoint rao.mohan.2014@gmail.com
+
+Publish to a Topic:
+aws sns publish --topic-arn arn:aws:sns:us-east-1:530000327822:my-topic --message "Hello World!"
+
+Unsubscribe from a Topic:
+aws sns unsubscribe --subscription-arn arn:aws:sns:us-east-1:530000327822:my-topic:1328f057-de93-4c15-512e-8bb22EXAMPLE
+
+aws sns list-subscriptions
+
+
+Delete a Topic:
+aws sns delete-topic --topic-arn arn:aws:sns:us-west-2:123456789012:my-topic
