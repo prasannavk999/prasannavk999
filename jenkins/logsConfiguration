@@ -1,0 +1,6 @@
+Add below Plugin.
+Manage Jenkins ===> Manage Plugins ===> Audit Trial
+Manage Jenkins ===> Configure System ===> Mention the required parameters under Audit Trial  
+like /var/lib/jenkins/logs
+Size 
+etc..
