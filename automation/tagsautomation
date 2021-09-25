@@ -1,0 +1,7 @@
+aws s3api list-buckets --query "Buckets[].Name" --output=text
+
+aws s3api get-bucket-tagging --bucket bhc-us-comm-dw-customername-2 >> test.txt
+
+aws s3api put-bucket-tagging --bucket bhc-us-comm-dw-customername-2 --tagging TagSet=[{Key=organization2,Value=marketing2},{Key=organization2,Value=marketing2}]
+
+aws s3api put-bucket-tagging --bucket bhc-us-comm-dw-customername-2 --tagging file://tagging.json
